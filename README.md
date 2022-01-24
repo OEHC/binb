@@ -4,7 +4,70 @@ binb is a simple, realtime, multiplayer, competitive music listening game.
 
 To play the game: [https://binb.co](https://binb.co)
 
-## Installation
+## Installation using docker (Recommended)
+
+Make sure that [docker](https://docs.docker.com/engine/install/) is installed.
+
+### Creating the docker image
+
+First, create a docker image of binb using the supplied Dockerfile:
+```console
+$ docker build . -t binb
+```
+
+### Run a container for the redis database
+
+To connect a redis container to your binb container, it is recommended to create a specific network.
+You can choose any valid subnet, here we will be using `172.18.0.0/16`:
+
+```console
+$ docker network create binb-net --subnet 172.18.0.0/16
+```
+
+Now run a redis server using our new network:
+
+```console
+$ docker run --name redis-server -d --network binb-net redis
+```
+
+Verify that the container is running:
+
+```console
+$ docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS      NAMES
+d17192393b71   redis     "docker-entrypoint.s…"   55 seconds ago   Up 54 seconds   6379/tcp   redis-server
+```
+
+### Run the binb container (using lpinca's sample tracks)
+
+All that is left now is to start a container running the binb image we created in step 1.
+However, we also need to supply the ip address of the redis-server, so that binb can connect to it.
+
+To fetch the ip adress, use the following command:
+
+```console
+$ docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' redis-server
+172.18.0.2
+```
+
+Run a binb container (make sure to replace the REDIS_URL value with the ip we retrieved in the previous step):
+
+```console
+$ docker run --name binb -e REDIS_URL=172.18.0.2 --network binb-net -p 8138:8138/tcp -p 8138:8138/udp -d binb
+```
+
+### Run the binb container (without loading sample tracks)
+
+You can run a shell in the binb container, edit the `config.json` file and/or use scripts from the `util` directory to add tracks to the database.
+Take a look at the [README](https://github.com/nnamua/binb/blob/master/util/README.md) file there to get started.
+
+```console
+$ docker run --name binb -e REDIS_URL=172.18.0.2 --network binb-net -p 8138:8138/tcp -p 8138:8138/udp -it binb bash
+```
+
+Another way is to edit the `run-with-sample-data.sh` shell script that will be executed on container start.
+
+## Installation without docker
 
 Unless previously installed you'll need the following packages:
 
@@ -18,20 +81,20 @@ Please use their sites to get detailed installation instructions.
 
 The first step is to install the dependencies:
 
-```shell
-npm install
+```console
+$ npm install
 ```
 
 Then you need to minify the assets:
 
-```shell
-npm run minify
+```console
+$ npm run minify
 ```
 
 Now make sure that the Redis server is running and load some sample tracks:
 
-```shell
-npm run import-data
+```console
+$ npm run import-data
 ```
 
 Finally run `npm start` or `node app.js` to start the app.
@@ -43,14 +106,14 @@ Point your browser to `http://127.0.0.1:8138` and have fun!
 Some package managers name the Node.js binary `nodejs`. In this case you'll get
 the following error:
 
-```shell
+```console
 sh: node: command not found
 ```
 
 To fix this issue, you can create a symbolic link:
 
-```shell
-sudo ln -s /usr/bin/nodejs /usr/bin/node
+```console
+$ sudo ln -s /usr/bin/nodejs /usr/bin/node
 ```
 
 and try again.
