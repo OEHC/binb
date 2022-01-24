@@ -98,6 +98,9 @@ if __name__ == "__main__":
         # Sleep for 2 seconds to avoid timeout by the API (limited to roughly 20 calls per minute)
         sleep(2)
 
+        # Wikipedia sometimes includes "featuring" in the artists name, which leads to problems
+        artistName = artistName.split("featuring")[0].strip()
+
         # Send search request
         params = {
             "term" : f"{trackName} {artistName}",
