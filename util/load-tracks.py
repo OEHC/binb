@@ -73,7 +73,7 @@ if __name__ == "__main__":
             "artworkUrl100" : track["artworkUrl100"]
         }
         song_id = str(uuid.uuid4())
-        name = f"song::{song_id}"
+        name = f"song:{song_id}"
         rc.hset(name, mapping=mapping)
 
         # Add song to room
