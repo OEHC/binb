@@ -56,16 +56,18 @@ Run a binb container (make sure to replace the REDIS_URL value with the ip we re
 $ docker run --name binb -e REDIS_URL=172.18.0.2 --network binb-net -p 8138:8138/tcp -p 8138:8138/udp -d binb
 ```
 
-### Run the binb container (without loading sample tracks)
+### Run the binb container (without sample tracks)
 
-You can run a shell in the binb container, edit the `config.json` file and/or use scripts from the `util` directory to add tracks to the database.
-Take a look at the [README](https://github.com/nnamua/binb/blob/master/util/README.md) file there to get started.
+If you run the redis server container with the option `-p 6379:6379` to add values to the database before starting the binb container.
+Take a look at the [README](https://github.com/nnamua/binb/blob/master/util/README.md) file in the `util` directory to find useful scripts to get started.
+
+After adding values to the database, run the binb container:
 
 ```console
-$ docker run --name binb -e REDIS_URL=172.18.0.2 --network binb-net -p 8138:8138/tcp -p 8138:8138/udp -it binb bash
+$ docker run --name binb -e REDIS_URL=172.18.0.2 --network binb-net -p 8138:8138/tcp -p 8138:8138/udp -d binb npm start
 ```
 
-Another way is to edit the `run-with-sample-data.sh` shell script that will be executed on container start.
+You could also edit `run-with-sample-data.sh` or `config.json`, but if you don't do it directly in the container you have to rebuild the image
 
 ## Installation without docker
 
