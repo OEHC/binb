@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
+
 import argparse, os, json, sys
+
 
 if __name__ == "__main__":
 
@@ -15,7 +18,7 @@ if __name__ == "__main__":
 
     # Room configuration
     if args.rooms != None:
-        rooms = args.rooms.split()
+        rooms = args.rooms.split(",")
         if any([" " in room for room in rooms]):
             sys.exit("Room names must not contain whitespace.")
 
@@ -32,6 +35,10 @@ if __name__ == "__main__":
     # Songs in a run
     if args.songsinarun:
         config["songsinarun"] = args.songsinarun
+
+    # Print configuration
+    print("Running binb with the following configuration:", flush=True)
+    print(json.dumps(config, indent=4), flush=True)
 
     # Save configuration file
     with open("config.json", "w", encoding="utf8") as config_file:

@@ -11,6 +11,6 @@ RUN npm install
 
 RUN npm run minify
 
-RUN chmod +x run-with-sample-data.sh
+RUN chmod +x entrypoint.py
 
-CMD ["run-with-sample-data.sh"]
+ENTRYPOINT ["python3", "entrypoint.py"]
