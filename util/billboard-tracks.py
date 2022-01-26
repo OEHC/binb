@@ -12,7 +12,7 @@ if __name__ == "__main__":
     # cli arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("years", type=int, nargs="+", help="One or more year, for which tracks should be fetched.")
-    parser.add_argument("-o, --output", dest="output", type=str, help="Output .csv file.")
+    parser.add_argument("-o", "--output", dest="output", type=str, help="Output .csv file.")
     args = parser.parse_args()
 
     output = args.output if args.output != None else f"billboard-hot{'_'.join([str(y) for y in args.years])}.csv"

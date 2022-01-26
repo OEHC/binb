@@ -60,7 +60,7 @@ if __name__ == "__main__":
     # cli arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("csv", type=str, help="Source .csv file, containing track information.")
-    parser.add_argument("-o, --output", dest="output", type=str, help="Output file name.")
+    parser.add_argument("-o", "--output", dest="output", type=str, help="Output file name.")
     args = parser.parse_args()
 
     # Logging
