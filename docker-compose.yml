@@ -1,0 +1,14 @@
+version: "3"
+services:
+  app:
+    build: .
+    command: [ "--rooms", "hits,pop,rock,oldies,rap,mixed"]
+    environment:
+      REDIS_URL: db
+    ports:
+      - "8138:8138/tcp"
+      - "8138:8138/udp"
+
+  db:
+    image: redis
+    
