@@ -55,6 +55,21 @@ def user_decision(question, options):
 
     return x if x != len(options) - 1 else None
 
+# Removes unnecessary information from the track/artist name
+def sanitize_trackName(trackName):
+    # Some tracks (especially from spotify) are in the form "Name - Additional Info"
+    trackName = trackName.split(" - ")[0]
+    # "Remaster" suffixes can also prevent results
+    remaster_suffixes = (" - Remastered", "Remastered", "(Remastered)")
+    for suffix in remaster_suffixes:
+        if suffix in trackName:
+            return trackName.split(suffix)[0]
+    return trackName
+
+def sanitize_artistName(artistName):
+    # Wikipedia sometimes includes "featuring" in the artists name, which leads to problems
+    return artistName.split("featuring")[0].strip()
+
 if __name__ == "__main__":
 
     # cli arguments
@@ -98,8 +113,9 @@ if __name__ == "__main__":
         # Sleep for 2 seconds to avoid timeout by the API (limited to roughly 20 calls per minute)
         sleep(2)
 
-        # Wikipedia sometimes includes "featuring" in the artists name, which leads to problems
-        artistName = artistName.split("featuring")[0].strip()
+        # Remove unnecessary information from artist/track name that might negatively impact search results 
+        artistName = sanitize_artistName(artistName)
+        trackName  = sanitize_trackName(trackName) 
 
         # Send search request
         params = {
@@ -120,6 +136,9 @@ if __name__ == "__main__":
         # Check if any of the results matches the requested song
         found = False
         for result in results:
+            if "mix" in result["collectionName"].lower(): # Let the user filter possible remixes
+                continue
+
             if match_trackName(trackName, result["trackName"]) and match_artistName(artistName, result["artistName"]):
                 data["tracks"].append(result)
                 found = True
@@ -137,7 +156,7 @@ if __name__ == "__main__":
 
         # If the track was not found, ask the user which song matches
         top5_results = results[0:5]
-        top5_options = [ f"'{t['trackName']}' by {t['artistName']}" for t in top5_results ]
+        top5_options = [ f"'{t['trackName']}' by {t['artistName']} (Collection: {t['collectionName']}" for t in top5_results ]
 
         question = f"No matching information was found for '{trackName}' by {artistName}. Please select manually:"
         decision = user_decision(question, top5_options)
