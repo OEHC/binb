@@ -136,8 +136,10 @@ if __name__ == "__main__":
         # Check if any of the results matches the requested song
         found = False
         for result in results:
-            if "mix" in result["collectionName"].lower(): # Let the user filter possible remixes
-                continue
+            # Let the user filter possible remixes or live recordings
+            for term in ("mix", "live"):
+                if term in result["collectionName"].lower() or "mix" in result["trackName"].lower():
+                    continue
 
             if match_trackName(trackName, result["trackName"]) and match_artistName(artistName, result["artistName"]):
                 data["tracks"].append(result)
