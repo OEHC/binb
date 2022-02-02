@@ -5,19 +5,21 @@ import json, argparse, os, redis, logging, uuid
     iTunes API responses, and inserts the tracks into the redis database.
 """
 
-db = os.getenv("REDIS_URL", "localhost")
-port = os.getenv("REDIS_PORT", 6379)
-
 if __name__ == "__main__":
 
     # cli arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("json", type=str, help="Input .json file")
     parser.add_argument("room_name", type=str, help="Stores track information for this room")
+    parser.add_argument("-p", "--port", dest="port", type=int, help="Port of the redis database (default: 6379")
+    parser.add_argument("-h", "--host", dest="host", type=str, help="Host of the redis database (default: localhost")
     args = parser.parse_args()
 
     # Logging
     logging.basicConfig(format="\033[33m%(levelname)s\033[0m :: %(message)s", level = logging.INFO)
+
+    host = args.host if args.host != None else "localhost"
+    port = args.port if args.port != None else 6379
 
     # Check file types
     if not args.json.endswith(".json"):
@@ -37,7 +39,7 @@ if __name__ == "__main__":
 
     # Connect to the database
     try:
-        rc = redis.Redis(host=db, port=port)
+        rc = redis.Redis(host=host, port=port)
     except Exception as e:
         logging.error(f"Could not connect to the redis db: {e}")
         exit()
@@ -72,7 +74,8 @@ if __name__ == "__main__":
             "artworkUrl60" : track["artworkUrl60"],
             "artworkUrl100" : track["artworkUrl100"]
         }
-        song_id = str(uuid.uuid4())
+        # use iTunes trackId to avoid multiple entries for same track
+        song_id = str(track["trackId"]) if "trackId" in track else str(uuid.uuid4())
         name = f"song:{song_id}"
         rc.hset(name, mapping=mapping)
 
