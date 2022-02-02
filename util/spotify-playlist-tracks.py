@@ -66,7 +66,13 @@ if __name__ == "__main__":
     except SpotifyException as e:
         sys.exit(e)
 
-    tracks = [ (item["track"]["name"], item["track"]["artists"][0]["name"]) for item in items ]
+    # Check for empty tracks where item["track"] == None
+    empty = [ index + 1 for index, item in enumerate(items) if item["track"] == None]
+    if len(empty) != 0:
+        logging.warning(f"No data for track(s) at the following position(s): {empty}")
+
+    # Write required information to file
+    tracks = [ (item["track"]["name"], item["track"]["artists"][0]["name"]) for item in items if item["track"] != None ]
 
     logging.info(f"Fetched {len(tracks)} tracks from playlist '{playlist_name}'.")
 
