@@ -1,0 +1,24 @@
+services:
+  binb:
+    build: .
+    ports:
+      - 8138:8138
+    command: sh -c "npm run import-data && npm run start"
+    environment:
+      - DB_HOST=redis
+    depends_on:
+      redis:
+        condition: service_healthy
+    links:
+      - redis
+
+  redis:
+    image: redis/redis-stack-server:latest
+# Uncomment the following lines to store the redis database on the host's filesystem to persist
+#    volumes:
+#      - /home/binb/binb-data/:/data/
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 2s
+      retries: 1

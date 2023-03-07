@@ -14,6 +14,8 @@ Unless previously installed you'll need the following packages:
 
 Please use their sites to get detailed installation instructions.
 
+Alternatively, binb can run in Docker containers and orchestrated using `docker-compose`.
+
 ### Install binb
 
 The first step is to install the dependencies:
@@ -54,6 +56,25 @@ sudo ln -s /usr/bin/nodejs /usr/bin/node
 ```
 
 and try again.
+
+### Running in Docker containers
+
+To run binb in a Docker container, [Docker](https://www.docker.com/) needs to be installed. Optionally, [docker-compose](https://docs.docker.com/compose/) can be used to orchestrate the containers.
+
+To start binb in Docker using `docker-compose`, run the following command:
+
+```shell
+docker-compose up -d
+```
+
+If the project is changed, the containers need to be rebuild. This can be done by running:
+
+```shell
+docker-compose up -d --build --force-recreate
+```
+
+#### Persisting the redis database
+By default, the redis database lives inside the container. To persist it between containers, uncomment the volume mapping in the `docker-compose.yaml` file.
 
 ## Browser compatibiliy
 
