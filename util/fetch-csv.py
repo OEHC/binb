@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse, logging, json, requests
 from os import path
 from http.client import responses

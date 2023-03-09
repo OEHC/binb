@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import spotipy, argparse, os, json, sys, logging
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
 from spotipy.exceptions import SpotifyException
