@@ -109,7 +109,6 @@ if __name__ == "__main__":
     unclear = []
 
     # Fetch information for each track
-    url = "https://itunes.apple.com/search?"
     for trackName, artistName in tracks:
 
         # Sleep for 2 seconds to avoid timeout by the API (limited to roughly 20 calls per minute)
