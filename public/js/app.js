@@ -61,7 +61,8 @@
     "Yes, you're right",
     'You make it look easy',
     'You remembered',
-    'You rock!'
+    'You rock!',
+    'gg wp'
   ];
 
   var nmstrings = [
@@ -80,7 +81,10 @@
     "That's wrong",
     'Try again',
     'What?!',
-    'Wrong'
+    'Wrong',
+    'Not even close!',
+    'lmao no',
+    'oof'
   ];
 
   var states = [
