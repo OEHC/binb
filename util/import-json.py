@@ -14,7 +14,7 @@ if __name__ == "__main__":
     parser.add_argument("json", type=str, help="Input .json file")
     parser.add_argument("room_name", type=str, help="Stores track information for this room")
     parser.add_argument("-p", "--port", dest="port", type=int, help="Port of the redis database (default: 6379")
-    parser.add_argument("-h", "--host", dest="host", type=str, help="Host of the redis database (default: localhost")
+    parser.add_argument("-s", "--server", dest="host", type=str, help="Host of the redis database (default: localhost")
     args = parser.parse_args()
 
     # Logging
