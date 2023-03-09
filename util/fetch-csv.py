@@ -122,7 +122,8 @@ if __name__ == "__main__":
         params = {
             "term" : f"{trackName} {artistName}",
             "entity" : "song",
-            "limit" : 100
+            "limit" : 100,
+            "country" : "dk"
         }
         response = requests.get(ITUNES_API_URL, params = params)
         if response.status_code != 200:
