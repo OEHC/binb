@@ -5,7 +5,9 @@ WORKDIR /app
 COPY . /app
 
 RUN apt-get update
-RUN apt-get install libcairo2-dev -y
+RUN apt-get install -y libcairo2 python3
+RUN apt-get clean && apt-get autoclean
+
 
 RUN npm install
 
